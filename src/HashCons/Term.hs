@@ -3,6 +3,7 @@ module HashCons.Term where
 ----------------------------------------------------------------------
 
 type Ident = String
+wildcard = "_"
 
 class Term a where
   pi  :: Ident -> a -> a -> a

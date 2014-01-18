@@ -13,6 +13,7 @@ pp x = putStrLn $ show (indent 2 (pretty x))
 instance Pretty Expr where
   pretty (EPi nm _A _B) = parens $
     parens (text nm </> text ":" </> pretty _A) </>
+    text "→" </>
     pretty _B
   pretty (ELam nm bd) = parens $
     text "λ" </>

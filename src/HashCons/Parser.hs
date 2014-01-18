@@ -15,8 +15,9 @@ import Control.Applicative
 ----------------------------------------------------------------------
 
 ops = ["λ", "→", ":"]
+nonIdent = ["(", ")"] ++ ops
 keywords = []
-identChar = satisfy (\c -> not (isSpace c || isControl c || c == '(' || c == ')'))
+identChar = satisfy (\c -> not (isSpace c || isControl c || elem c (concat nonIdent)))
 
 def = emptyDef {
   commentStart = "{-"
@@ -77,7 +78,8 @@ formatParseError error = printf "%s:%i:%i:\n%s" file line col msg
 
 parseExpr :: ParserM Expr
 parseExpr = tryChoices
-  [ parseAppsOrAtom
+  [ parseArr
+  , parseAppsOrAtom
   , parsePi
   , parseLam
   ]
@@ -102,11 +104,18 @@ parsePiDomain = parseParens $ do
   _A <- parseExpr
   return (nm , _A)
 
-parsePi = do
-  (nm , _A) <- parsePiDomain
+parseArrDomain = do
+  _A <- parseAppsOrAtom
+  return (wildcard , _A)
+
+parseFun dom = do
+  (nm , _A) <- dom
   parseOp "→"
   _B <- parseExpr
   return $ pi nm _A _B
+
+parseArr = parseFun parseArrDomain
+parsePi = parseFun parsePiDomain
 
 parseLam = do
   parseOp "λ"
