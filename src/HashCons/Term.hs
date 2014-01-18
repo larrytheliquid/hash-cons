@@ -13,7 +13,7 @@ class Term a where
 
 apps :: Term a => [a] -> a
 apps (x : []) = x
-apps (x : xs) = app x (apps xs)
+apps (x : y : xs) = apps (app x y : xs)
 apps [] = error "need at least 1 apps argument"
 
 lams :: Term a => [Ident] -> a -> a

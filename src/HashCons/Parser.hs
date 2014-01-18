@@ -46,10 +46,15 @@ tryChoices xs = choice (map try xs)
 
 ----------------------------------------------------------------------
 
-printCode :: String -> String
+printCode :: String -> IO ()
 printCode cd = case parseFile "." cd of
-  Left error -> formatParseError error
-  Right expr -> pp expr
+  Left error -> putStrLn (formatParseError error) >> putStrLn ""
+  Right expr -> pp expr >> putStrLn ""
+
+-- printCode :: String -> String
+-- printCode cd = case parseFile "." cd of
+--   Left error -> formatParseError error
+--   Right expr -> pp expr
 
 parseFile :: FilePath -> String -> Either ParseError Expr
 parseFile = parse (parseSpaces >> (parseExpr <* eof))

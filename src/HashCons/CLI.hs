@@ -1,7 +1,14 @@
 module HashCons.CLI where
 import System.IO
+import System.Environment
 import HashCons.Term
 import HashCons.Parser
+import HashCons.Printer
+
+run :: IO ()
+run = do
+  args <- getArgs
+  hashConsFile (head args)
 
 hashConsFile :: FilePath -> IO ()
 hashConsFile file = do
@@ -14,7 +21,6 @@ hashConsFile file = do
     Right expr -> do
       putStrLn $ "Parsed expression:"
       putStrLn ""
-      putStrLn $ show expr
-      putStrLn ""
+      pp expr
 
 

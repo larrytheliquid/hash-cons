@@ -1,0 +1,73 @@
+ind ⊤
+(`Arg (Tag (cons "zero" (cons "suc" nil)))
+ (λ t →
+    case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+    (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t))
+(λ _ _ →
+   μ ⊤
+   (`Arg (Tag (cons "zero" (cons "suc" nil)))
+    (λ t →
+       case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+       (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t))
+   tt →
+   μ ⊤
+   (`Arg (Tag (cons "zero" (cons "suc" nil)))
+    (λ t →
+       case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+       (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t))
+   tt)
+(λ u t,c →
+   case (cons "zero" (cons "suc" nil))
+   (λ t →
+      (c
+       : El ⊤
+         (case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+          (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t)
+         (μ ⊤
+          (`Arg (Tag (cons "zero" (cons "suc" nil)))
+           (λ t₁ →
+              case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+              (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t₁)))
+         u)
+      →
+      All ⊤
+      (case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+       (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t)
+      (μ ⊤
+       (`Arg (Tag (cons "zero" (cons "suc" nil)))
+        (λ t₁ →
+           case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+           (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t₁)))
+      (λ u₁ n →
+         μ ⊤
+         (`Arg (Tag (cons "zero" (cons "suc" nil)))
+          (λ t₁ →
+             case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+             (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t₁))
+         u₁ →
+         μ ⊤
+         (`Arg (Tag (cons "zero" (cons "suc" nil)))
+          (λ t₁ →
+             case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+             (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t₁))
+         u₁)
+      u c →
+      μ ⊤
+      (`Arg (Tag (cons "zero" (cons "suc" nil)))
+       (λ t₁ →
+          case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+          (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t₁))
+      u →
+      μ ⊤
+      (`Arg (Tag (cons "zero" (cons "suc" nil)))
+       (λ t₁ →
+          case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+          (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t₁))
+      u)
+   (pair (λ q ih n → n)
+    (pair
+     (λ m,q ih,tt n →
+        con (pair (there here) (pair (proj₁ ih,tt n) refl)))
+     tt))
+   (proj₁ t,c) (proj₂ t,c))
+tt

@@ -7,7 +7,7 @@ open import Data.List
    renaming ([] to nil ; _∷_ to cons)
 open import Data.String
 open import Relation.Binary.PropositionalEquality
-module PropositionalDesc where
+module Desc where
 
 ----------------------------------------------------------------------
 
