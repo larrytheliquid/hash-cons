@@ -1,5 +1,6 @@
 module HashCons.Parser where
 import HashCons.Term
+import HashCons.Printer
 import Prelude hiding (pi)
 import Text.Parsec hiding ( label )
 import Text.Parsec.Expr
@@ -45,6 +46,14 @@ tryChoices xs = choice (map try xs)
 
 ----------------------------------------------------------------------
 
+printCode :: String -> String
+printCode cd = case parseFile "." cd of
+  Left error -> formatParseError error
+  Right expr -> pp expr
+
+parseFile :: FilePath -> String -> Either ParseError Expr
+parseFile = parse (parseSpaces >> (parseExpr <* eof))
+
 -- Format error message so that Emacs' compilation mode can parse the
 -- location information.
 formatParseError :: ParseError -> String
@@ -60,9 +69,6 @@ formatParseError error = printf "%s:%i:%i:\n%s" file line col msg
           (errorMessages error)
 
 ----------------------------------------------------------------------
-
-parseFile :: FilePath -> String -> Either ParseError Expr
-parseFile = parse (parseSpaces >> (parseExpr <* eof))
 
 parseExpr :: ParserM Expr
 parseExpr = tryChoices
