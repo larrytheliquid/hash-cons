@@ -27,7 +27,10 @@ empty :: BiMap a
 empty = BiMap (M.empty) (IM.empty)
 
 instance Show a => Show (BiMap a) where
-    show (BiMap _ m) =  "BiMap" ++ show (IM.toList m)
+    show (BiMap _ g) =  "BiMap" ++ show (IM.toList g)
 
 size :: BiMap a -> Int
 size (BiMap _ m) = IM.size m
+
+toList :: BiMap a -> [(Int , a)]
+toList (BiMap _ g) = IM.toList g

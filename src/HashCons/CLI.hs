@@ -21,8 +21,9 @@ hashConsFile file = do
 
     Right expr -> do
       -- putStrLn "Parsed!"
-      -- pp expr
+      -- pp 2 expr
       -- putStrLn $ show $ count expr
       let g = snd $ runNodeM expr
-      putStrLn $ show $ size g
+      pp 0 g
+      -- putStrLn $ show $ size g
 
