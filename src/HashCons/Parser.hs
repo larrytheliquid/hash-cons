@@ -101,16 +101,16 @@ parseAppsOrAtom = apps <$> many1 parseAtom
 ----------------------------------------------------------------------
 
 parsePiDomains = many1 $ parseParens $ do
-  nm <- parseIdent
+  nms <- many1 parseIdent
   parseOp ":"
   _A <- parseExpr
-  return (nm , _A)
+  return $ map (\nm -> (nm , _A)) nms
 
 parsePis = do
   nm_As <- parsePiDomains
   parseOp "→"
   _B <- parseExpr
-  return $ pis nm_As _B
+  return $ pis (concat nm_As) _B
 
 ----------------------------------------------------------------------
 

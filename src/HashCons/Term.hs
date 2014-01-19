@@ -45,4 +45,11 @@ instance Term Expr where
   var = EVar
   label = ELabel
 
+count :: Expr -> Int
+count (EPi _ _A _B) = 1 + count _A + count _B
+count (ELam _ bd) = 1 + count bd
+count (EApp f a) = 1 + count f + count a
+count (EVar _) = 1
+count (ELabel _) = 1
+
 ----------------------------------------------------------------------

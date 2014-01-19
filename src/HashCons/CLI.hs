@@ -19,6 +19,8 @@ hashConsFile file = do
       putStrLn $ formatParseError error
 
     Right expr -> do
+      -- putStrLn "Parsed!"
       pp expr
+      -- putStrLn $ show $ count expr
 
 
