@@ -21,6 +21,4 @@ hashConsFile file = do
     Right expr -> do
       -- putStrLn "Parsed!"
       pp expr
-      -- putStrLn $ show $ count expr
-
 
