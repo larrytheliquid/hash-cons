@@ -47,17 +47,7 @@ tryChoices xs = choice (map try xs)
 
 ----------------------------------------------------------------------
 
-printCode :: String -> IO ()
-printCode cd = case parseFile "." cd of
-  Left error -> putStrLn (formatParseError error) >> putStrLn ""
-  Right expr -> pp expr >> putStrLn ""
-
--- printCode :: String -> String
--- printCode cd = case parseFile "." cd of
---   Left error -> formatParseError error
---   Right expr -> pp expr
-
-parseFile :: FilePath -> String -> Either ParseError Expr
+parseFile :: Term a => FilePath -> String -> Either ParseError a
 parseFile = parse (parseSpaces >> (parseExpr <* eof))
 
 -- Format error message so that Emacs' compilation mode can parse the
@@ -76,7 +66,7 @@ formatParseError error = printf "%s:%i:%i:\n%s" file line col msg
 
 ----------------------------------------------------------------------
 
-parseExpr :: ParserM Expr
+parseExpr :: Term a => ParserM a
 parseExpr = tryChoices
   [ parseArr
   , parseAppsOrAtom
@@ -84,6 +74,7 @@ parseExpr = tryChoices
   , parseLam
   ]
 
+parseAtom :: Term a => ParserM a
 parseAtom = tryChoices
   [ parseParens parseExpr
   , parseVar
@@ -92,20 +83,25 @@ parseAtom = tryChoices
 
 ----------------------------------------------------------------------
 
+parseVar :: Term a => ParserM a
 parseVar = var <$> parseIdent
 
+parseLabel :: Term a => ParserM a
 parseLabel = label <$> parseStringLit
 
+parseAppsOrAtom :: Term a => ParserM a
 parseAppsOrAtom = apps <$> many1 parseAtom
 
 ----------------------------------------------------------------------
 
+parsePiDomains :: Term a => ParserM [[(Ident ,a)]]
 parsePiDomains = many1 $ parseParens $ do
   nms <- many1 parseIdent
   parseOp ":"
   _A <- parseExpr
   return $ map (\nm -> (nm , _A)) nms
 
+parsePis :: Term a => ParserM a
 parsePis = do
   nm_As <- parsePiDomains
   parseOp "→"
@@ -114,10 +110,12 @@ parsePis = do
 
 ----------------------------------------------------------------------
 
+parseArrDomain :: Term a => ParserM (Ident , a)
 parseArrDomain = do
   _A <- parseAppsOrAtom
   return (wildcard , _A)
 
+parseArr :: Term a => ParserM a
 parseArr = do
   (nm , _A) <- parseArrDomain
   parseOp "→"
@@ -126,6 +124,7 @@ parseArr = do
 
 ----------------------------------------------------------------------
 
+parseLam :: Term a => ParserM a
 parseLam = do
   parseOp "λ"
   nms <- many1 parseIdent

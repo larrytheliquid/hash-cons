@@ -4,6 +4,7 @@ import System.Environment
 import HashCons.Term
 import HashCons.Parser
 import HashCons.Printer
+import HashCons.BiMap
 
 run :: IO ()
 run = do
@@ -20,5 +21,8 @@ hashConsFile file = do
 
     Right expr -> do
       -- putStrLn "Parsed!"
-      pp expr
+      -- pp expr
+      -- putStrLn $ show $ count expr
+      let g = snd $ runNodeM expr
+      putStrLn $ show $ size g
 

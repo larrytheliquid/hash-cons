@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeSynonymInstances , FlexibleInstances #-}
 module HashCons.Term where
 import HashCons.BiMap
 import Prelude hiding ( pi )
@@ -59,7 +58,7 @@ count (ELabel _) = 1
 
 type NodeId = Int
 type DAG = BiMap Node
-type NodeM = State DAG NodeId
+newtype NodeM = NodeM { unNodeM :: State DAG NodeId }
 
 data Node =
     NPi Ident NodeId NodeId
@@ -69,7 +68,7 @@ data Node =
   | NLabel Ident
   deriving ( Show , Eq , Ord )
 
-hashcons :: Node -> NodeM
+hashcons :: Node -> State DAG NodeId
 hashcons n = do
   g <- get
   case lookupKey n g of
@@ -80,21 +79,21 @@ hashcons n = do
     Just k -> return k
 
 instance Term NodeM where
-  pi nm _A _B = do
-     _A <- _A
-     _B <- _B
+  pi nm _A _B = NodeM $ do
+     _A <- unNodeM _A
+     _B <- unNodeM _B
      hashcons $ NPi nm _A _B
-  lam nm bd = do
-    bd <- bd
+  lam nm bd = NodeM $ do
+    bd <- unNodeM bd
     hashcons $ NLam nm bd
-  app f a = do
-    f <- f
-    a <- a
+  app f a = NodeM $ do
+    f <- unNodeM f
+    a <- unNodeM a
     hashcons $ NApp f a
-  var nm = hashcons $ NVar nm
-  label nm = hashcons $ NLabel nm
+  var nm = NodeM $ hashcons $ NVar nm
+  label nm = NodeM $ hashcons $ NLabel nm
 
 runNodeM :: NodeM -> (NodeId , DAG)
-runNodeM m = runState m empty
+runNodeM (NodeM m) = runState m empty
 
 ----------------------------------------------------------------------
