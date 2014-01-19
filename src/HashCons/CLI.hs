@@ -19,8 +19,6 @@ hashConsFile file = do
       putStrLn $ formatParseError error
 
     Right expr -> do
-      putStrLn $ "Parsed expression:"
-      putStrLn ""
       pp expr
 
 
