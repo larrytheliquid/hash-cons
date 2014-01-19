@@ -1,0 +1,18 @@
+μ ⊤
+(`Arg (Tag (cons "zero" (cons "suc" nil)))
+ (λ t →
+    case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+    (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t))
+tt →
+μ ⊤
+(`Arg (Tag (cons "zero" (cons "suc" nil)))
+ (λ t →
+    case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+    (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t))
+tt →
+μ ⊤
+(`Arg (Tag (cons "zero" (cons "suc" nil)))
+ (λ t →
+    case (cons "zero" (cons "suc" nil)) (λ _ → Desc ⊤)
+    (pair (`End tt) (pair (`Rec tt (`End tt)) tt)) t))
+tt

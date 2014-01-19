@@ -80,7 +80,7 @@ parseExpr :: ParserM Expr
 parseExpr = tryChoices
   [ parseArr
   , parseAppsOrAtom
-  , parsePi
+  , parsePis
   , parseLam
   ]
 
@@ -98,24 +98,33 @@ parseLabel = label <$> parseStringLit
 
 parseAppsOrAtom = apps <$> many1 parseAtom
 
-parsePiDomain = parseParens $ do
+----------------------------------------------------------------------
+
+parsePiDomains = many1 $ parseParens $ do
   nm <- parseIdent
   parseOp ":"
   _A <- parseExpr
   return (nm , _A)
 
+parsePis = do
+  nm_As <- parsePiDomains
+  parseOp "→"
+  _B <- parseExpr
+  return $ pis nm_As _B
+
+----------------------------------------------------------------------
+
 parseArrDomain = do
   _A <- parseAppsOrAtom
   return (wildcard , _A)
 
-parseFun dom = do
-  (nm , _A) <- dom
+parseArr = do
+  (nm , _A) <- parseArrDomain
   parseOp "→"
   _B <- parseExpr
   return $ pi nm _A _B
 
-parseArr = parseFun parseArrDomain
-parsePi = parseFun parsePiDomain
+----------------------------------------------------------------------
 
 parseLam = do
   parseOp "λ"

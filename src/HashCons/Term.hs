@@ -1,4 +1,5 @@
 module HashCons.Term where
+import Prelude hiding ( pi )
 
 ----------------------------------------------------------------------
 
@@ -11,6 +12,11 @@ class Term a where
   app :: a -> a -> a
   var :: Ident -> a
   label :: Ident -> a
+
+pis :: Term a => [(Ident , a)] -> a -> a
+pis ((nm , _A) : []) _B = pi nm _A _B
+pis ((nm , _A) : nm_As) _B = pi nm _A (pis nm_As _B)
+pis [] _B = error "need at least 1 pis domain"
 
 apps :: Term a => [a] -> a
 apps (x : []) = x
