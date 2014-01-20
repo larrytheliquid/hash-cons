@@ -14,6 +14,7 @@ Two =
   (Desc ⊤))) ((pair (`End tt))
   ((pair ((`Rec tt) (`End tt)))
   tt))) t)))) tt)
+
 ----------------------------------------------------------------------
 
 two : Desc.Examples.Two

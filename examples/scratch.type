@@ -1,1 +1,1 @@
-(a : A) → (b : B a) → C a b
+(a : A)  (b : B a) → C a b
