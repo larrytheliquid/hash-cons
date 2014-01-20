@@ -25,5 +25,5 @@ hashConsFile file = do
       -- putStrLn $ show $ count expr
       let g = snd $ runNodeM expr
       pp 0 g
-      -- putStrLn $ show $ size g
+      putStrLn $ show $ size g
 
